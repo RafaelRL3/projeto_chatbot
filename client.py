@@ -1,26 +1,25 @@
-import socket
-import json 
-from rdt import rdtConnection
+from rdt import rdt_connection
 
-class data:
+'''
+serverPort = 6000
+serverIP = 'localhost'
 
-    def __init__(self,seq,checksum,message,timeout):
-        self.seq = seq
-        self.checksum = checksum
-        self.message = message
-        self.timeout = timeout
+clientSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-    def to_json(self):
-        '''
-        convert the instance of this class to json
-        '''
-        return json.dumps(self, indent = 4, default=lambda o: o.__dict__)
+serverID = (serverIP, serverPort)
 
-client = rdtConnection(ip='localhost', port=6000)
+message = input("Type a message:")
+
+clientSocket.sendto(message.encode(), serverID)
+'''
+
+
+client = rdt_connection(6000)
 
 while True:
-    msg = input('Type a message ')
-    client.send(msg)
-
-
-
+    try:
+        msg = input('Type message: ')
+        client.rdt_send(msg)
+    except KeyboardInterrupt:
+        client.close_connection()
+        break
